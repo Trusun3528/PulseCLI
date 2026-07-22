@@ -11,6 +11,11 @@
 - **🐙 GitHub**: Discover trending repositories by language and time range.
 - **📈 Stocks**: Live stock ticker tracking powered by Yahoo Finance.
 - **🖥️ System**: Real-time monitoring for CPU, Memory, Disk, and Network usage.
+- **🪙 Crypto**: Live cryptocurrency tracking powered by Yahoo Finance.
+- **🤖 AI Models**: Discover top trending models via Hugging Face.
+- **📅 Calendar**: Track upcoming events via ICS links or world public holidays.
+- **🐙 Pull Requests**: Monitor your open GitHub Pull Requests.
+- **📂 File Explorer**: Browse and open local files directly from the dashboard.
 
 ## 🛠️ Installation
 
@@ -45,7 +50,7 @@ python main.py --tab news
 ```
 
 ### ⌨️ Key Bindings
-- `1-7`: Switch between tabs (Weather, News, YouTube, Hacker News, GitHub, Stocks, System)
+- `1-7`, `8`, `9`, `0`, `-`, `=`: Switch between tabs (Weather, News, YouTube, Hacker News, GitHub, Stocks, System, Crypto, AI Models, Calendar, PRs, Files)
 - `S`: Open Settings
 - `R` or `Ctrl+R`: Refresh current tab
 - `Enter`: Open selected article/link in your browser
@@ -66,7 +71,10 @@ Your configuration is saved securely to `~/.config/pulse/config.toml`.
 - **News**: [NewsAPI](https://newsapi.org/) (Free tier)
 - **YouTube**: [YouTube Data API v3](https://console.cloud.google.com/) (Free tier)
 
-*(Hacker News, GitHub, Stocks, and System Monitor work out of the box and require no API keys!)*
+### Optional APIs:
+- **GitHub PRs**: Optional Personal Access Token for higher rate limits.
+
+*(Hacker News, GitHub, Stocks, Crypto, AI Models, Calendar, Files, and System Monitor work out of the box!)*
 
 ## 🤝 Contributing
 
