@@ -135,6 +135,9 @@ class HackerNewsWidget(Widget):
             f"{len(self._stories)} stories · [bold]Enter[/bold] open · [bold]C[/bold] HN thread[/dim]"
         )
 
+    def on_data_table_row_selected(self, event: DataTable.RowSelected) -> None:
+        self.action_open_story()
+
     def action_open_story(self) -> None:
         self._open("url")
 

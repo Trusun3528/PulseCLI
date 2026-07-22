@@ -146,6 +146,9 @@ class GitHubWidget(Widget):
             f"{len(self._repos)} repos · [bold]Enter[/bold] open on GitHub[/dim]"
         )
 
+    def on_data_table_row_selected(self, event: DataTable.RowSelected) -> None:
+        self.action_open_repo()
+
     def action_open_repo(self) -> None:
         table = self.query_one(DataTable)
         if table.cursor_row is not None and table.cursor_row < len(self._repos):

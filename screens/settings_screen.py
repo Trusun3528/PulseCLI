@@ -115,6 +115,9 @@ class SettingsScreen(Screen):
                 yield from self._news_section()
                 yield from self._youtube_section()
                 yield from self._stocks_section()
+                yield from self._crypto_section()
+                yield from self._calendar_section()
+                yield from self._github_prs_section()
                 yield from self._general_section()
             with Horizontal(id="settings-footer"):
                 yield Static("Press Ctrl+S to save  ·  Esc to cancel", classes="field-hint")
@@ -170,6 +173,33 @@ class SettingsScreen(Screen):
         tickers = ", ".join(sc.get("tickers", []))
         yield Input(value=tickers, placeholder="e.g. AAPL, GOOGL, MSFT, TSLA", id="stocks-tickers")
 
+    def _crypto_section(self):
+        cc = self._config.get("crypto", {})
+        yield Static("🪙  Crypto", classes="section-title")
+        yield Static("──────────────────────────────────────────", classes="section-divider")
+        yield Label("Crypto Tickers (comma-separated)", classes="field-label")
+        yield Label("Format like BTC-USD", classes="field-hint")
+        tickers = ", ".join(cc.get("tickers", []))
+        yield Input(value=tickers, placeholder="e.g. BTC-USD, ETH-USD", id="crypto-tickers")
+
+    def _calendar_section(self):
+        cc = self._config.get("calendar", {})
+        yield Static("📅  Calendar", classes="section-title")
+        yield Static("──────────────────────────────────────────", classes="section-divider")
+        yield Label("Calendar ICS URL", classes="field-label")
+        yield Label("Leave empty for public holidays", classes="field-hint")
+        yield Input(value=cc.get("ics_url", ""), placeholder="https://.../basic.ics", id="calendar-url")
+
+    def _github_prs_section(self):
+        gc = self._config.get("github_prs", {})
+        yield Static("🐙  GitHub PRs", classes="section-title")
+        yield Static("──────────────────────────────────────────", classes="section-divider")
+        yield Label("GitHub Username", classes="field-label")
+        yield Label("Your GitHub handle", classes="field-hint")
+        yield Input(value=gc.get("username", ""), placeholder="e.g. octocat", id="github-prs-username")
+        yield Label("GitHub PAT (Optional but recommended)", classes="field-label")
+        yield Input(value=gc.get("token", ""), placeholder="ghp_...", password=True, id="github-prs-token")
+
     def _general_section(self):
         gc = self._config.get("general", {})
         yield Static("⚙  General", classes="section-title")
@@ -212,6 +242,23 @@ class SettingsScreen(Screen):
         # Stocks
         tickers_raw = self.query_one("#stocks-tickers", Input).value
         config["stocks"]["tickers"] = [t.strip().upper() for t in tickers_raw.split(",") if t.strip()]
+
+        # Crypto
+        if "crypto" not in config:
+            config["crypto"] = {}
+        crypto_raw = self.query_one("#crypto-tickers", Input).value
+        config["crypto"]["tickers"] = [t.strip().upper() for t in crypto_raw.split(",") if t.strip()]
+
+        # Calendar
+        if "calendar" not in config:
+            config["calendar"] = {}
+        config["calendar"]["ics_url"] = self.query_one("#calendar-url", Input).value.strip()
+
+        # GitHub PRs
+        if "github_prs" not in config:
+            config["github_prs"] = {}
+        config["github_prs"]["username"] = self.query_one("#github-prs-username", Input).value.strip()
+        config["github_prs"]["token"] = self.query_one("#github-prs-token", Input).value.strip()
 
         # General
         try:

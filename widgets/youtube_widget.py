@@ -149,4 +149,5 @@ class YoutubeWidget(Widget):
         if 0 <= idx < len(self._videos):
             url = self._videos[idx].get("url")
             if url:
-                self.post_message(self.OpenLink(url))
+                webbrowser.open(url)
+                self.notify("Opened in browser", severity="information")

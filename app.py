@@ -17,6 +17,11 @@ from widgets.youtube_widget import YoutubeWidget
 from widgets.stocks_widget import StocksWidget
 from widgets.sysinfo_widget import SysInfoWidget
 from widgets.weather_widget import WeatherWidget
+from widgets.crypto_widget import CryptoWidget
+from widgets.aimodels_widget import AiModelsWidget
+from widgets.calendar_widget import CalendarWidget
+from widgets.github_prs_widget import GithubPrsWidget
+from widgets.files_widget import FilesWidget
 
 
 class PulseApp(App):
@@ -37,6 +42,11 @@ class PulseApp(App):
         Binding("5", "switch_tab('github')", "GitHub", show=False),
         Binding("6", "switch_tab('stocks')", "Stocks", show=False),
         Binding("7", "switch_tab('system')", "System", show=False),
+        Binding("8", "switch_tab('crypto')", "Crypto", show=False),
+        Binding("9", "switch_tab('aimodels')", "AI Models", show=False),
+        Binding("0", "switch_tab('calendar')", "Calendar", show=False),
+        Binding("-", "switch_tab('github_prs')", "PRs", show=False),
+        Binding("=", "switch_tab('files')", "Files", show=False),
         Binding("ctrl+r", "refresh_current", "Refresh", show=False),
     ]
 
@@ -57,6 +67,16 @@ class PulseApp(App):
                 yield StocksWidget()
             with TabPane("  🖥  System  ", id="system"):
                 yield SysInfoWidget()
+            with TabPane("  🪙  Crypto  ", id="crypto"):
+                yield CryptoWidget()
+            with TabPane("  🤖  AI Models  ", id="aimodels"):
+                yield AiModelsWidget()
+            with TabPane("  📅  Calendar  ", id="calendar"):
+                yield CalendarWidget()
+            with TabPane("  🐙  PRs  ", id="github_prs"):
+                yield GithubPrsWidget()
+            with TabPane("  📂  Files  ", id="files"):
+                yield FilesWidget()
         yield Footer()
 
     def on_mount(self) -> None:
@@ -95,6 +115,11 @@ class PulseApp(App):
                 "github": GitHubWidget,
                 "stocks": StocksWidget,
                 "system": SysInfoWidget,
+                "crypto": CryptoWidget,
+                "aimodels": AiModelsWidget,
+                "calendar": CalendarWidget,
+                "github_prs": GithubPrsWidget,
+                "files": FilesWidget,
             }
             widget_class = widget_map.get(active)
             if widget_class:
@@ -111,5 +136,13 @@ class PulseApp(App):
                     widget.load_trending()
                 elif hasattr(widget, "load_quotes"):
                     widget.load_quotes()
+                elif hasattr(widget, "load_events"):
+                    widget.load_events()
+                elif hasattr(widget, "load_prs"):
+                    widget.load_prs()
+                elif hasattr(widget, "load_models"):
+                    widget.load_models()
+                elif hasattr(widget, "action_refresh"):
+                    widget.action_refresh()
         except Exception:
             pass

@@ -137,6 +137,9 @@ class NewsWidget(Widget):
         fallback_note = f"  [dim #f59e0b]⚠ No '{fallback.upper()}' articles on free tier — showing US[/]" if fallback else ""
         status.update(f"[dim] {len(articles)} articles · Press [bold]Enter[/bold] to open · [bold]R[/bold] refresh[/dim]{fallback_note}")
 
+    def on_data_table_row_selected(self, event: DataTable.RowSelected) -> None:
+        self.action_open_article()
+
     def action_open_article(self) -> None:
         table = self.query_one(DataTable)
         if table.cursor_row is None:

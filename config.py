@@ -43,6 +43,17 @@ DEFAULT_CONFIG: Dict[str, Any] = {
         "tickers": ["AAPL", "GOOGL", "MSFT", "TSLA", "NVDA", "AMZN", "META"],
         "refresh_interval": 60,
     },
+    "crypto": {
+        "tickers": ["BTC-USD", "ETH-USD", "SOL-USD", "DOGE-USD"],
+        "refresh_interval": 60,
+    },
+    "calendar": {
+        "ics_url": "",
+    },
+    "github_prs": {
+        "username": "",
+        "token": "",
+    }
 }
 
 

@@ -1,5 +1,5 @@
 """
-Stocks widget for Pulse — real-time quotes with sparklines.
+Crypto widget for Pulse — real-time quotes with sparklines.
 """
 
 import webbrowser
@@ -19,8 +19,8 @@ from config import load_config
 from providers.stocks import fetch_quotes
 
 
-class StocksWidget(Widget):
-    """Stock market ticker with sparklines and price change indicators."""
+class CryptoWidget(Widget):
+    """Crypto market ticker with sparklines and price change indicators."""
 
     BINDINGS = [
         Binding("enter", "open_yahoo", "Open Yahoo Finance"),
@@ -30,19 +30,19 @@ class StocksWidget(Widget):
     ]
 
     DEFAULT_CSS = """
-    StocksWidget {
+    CryptoWidget {
         height: 1fr;
         width: 1fr;
         layout: vertical;
     }
-    #stocks-header {
+    #crypto-header {
         height: 3;
         background: #1a1d2e;
         color: #94a3b8;
         padding: 0 2;
         content-align: left middle;
     }
-    #stocks-status {
+    #crypto-status {
         height: 1;
         background: #1a1d2e;
         color: #94a3b8;
@@ -57,49 +57,29 @@ class StocksWidget(Widget):
     _quotes: reactive[List[Dict]] = reactive([])
 
     def compose(self) -> ComposeResult:
-        yield Static("", id="stocks-header")
-        yield DataTable(id="stocks-table", cursor_type="row", zebra_stripes=True)
-        yield Static("", id="stocks-status")
+        yield Static("🪙  Crypto Tracker  ", id="crypto-header")
+        yield DataTable(id="crypto-table", cursor_type="row", zebra_stripes=True)
+        yield Static("", id="crypto-status")
 
     def on_mount(self) -> None:
         table = self.query_one(DataTable)
         table.add_columns(
-            "  Ticker", "Price", "Change", "Chg %", "Sparkline (7d)",
+            "  Coin", "Price", "Change", "Chg %", "Sparkline (7d)",
             "Market Cap", "52W Range",
         )
-        self._update_header()
         self.load_quotes()
         # Auto-refresh timer
         self.set_interval(60, self.load_quotes)
 
-    def _update_header(self) -> None:
-        from datetime import datetime
-        now = datetime.now()
-        # Rough market hours check (ET): Mon–Fri, 9:30–16:00
-        weekday = now.weekday()  # 0=Mon
-        hour = now.hour
-        minute = now.minute
-        is_open = (weekday < 5) and (
-            (hour == 9 and minute >= 30) or (10 <= hour <= 15) or (hour == 16 and minute == 0)
-        )
-        status = Text()
-        status.append("📈  Stock Watchlist  ", style="bold #e2e8f0")
-        if is_open:
-            status.append("● MARKET OPEN", style="bold #10b981")
-        else:
-            status.append("● MARKET CLOSED", style="bold #64748b")
-        status.append("  (approx. ET)", style="dim")
-        self.query_one("#stocks-header", Static).update(status)
-
     @work(exclusive=True, thread=False)
     async def load_quotes(self) -> None:
         config = load_config()
-        tickers = config["stocks"].get("tickers", [])
+        tickers = config.get("crypto", {}).get("tickers", [])
 
         table = self.query_one(DataTable)
         table.clear()
-        status = self.query_one("#stocks-status", Static)
-        status.update("[dim]⟳ Fetching stock quotes…[/dim]")
+        status = self.query_one("#crypto-status", Static)
+        status.update("[dim]⟳ Fetching crypto quotes…[/dim]")
 
         if not tickers:
             table.add_row(
@@ -139,10 +119,9 @@ class StocksWidget(Widget):
             table.add_row(ticker, price, change_t, chg_pct_t, spark, cap, range_t, key=str(i))
 
         status.update(
-            "[dim] 📈 Stocks · Auto-refresh every 60s · "
+            "[dim] 🪙 Crypto · Auto-refresh every 60s · "
             "[bold]Enter[/bold] open Yahoo Finance · [bold]R[/bold] refresh now[/dim]"
         )
-        self._update_header()
 
     def on_data_table_row_selected(self, event: DataTable.RowSelected) -> None:
         self.action_open_yahoo()

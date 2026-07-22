@@ -18,11 +18,11 @@ def main():
         description="Pulse — your personal terminal dashboard",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
-Tabs:  weather | news | youtube | hackernews | github | stocks | system
+Tabs:  weather | news | youtube | hackernews | github | stocks | system | crypto | aimodels | calendar | github_prs | files
 
 Key bindings (inside the app):
-  1-7     Switch tabs
-  S       Open Settings
+  1-7, 8, 9, 0, -, =  Switch tabs
+  S                   Open Settings
   R       Refresh current tab
   Q       Quit
 
@@ -32,7 +32,7 @@ Configure API keys by pressing S inside the app, or edit:
     )
     parser.add_argument(
         "--tab",
-        choices=["weather", "news", "youtube", "hackernews", "github", "stocks", "system"],
+        choices=["weather", "news", "youtube", "hackernews", "github", "stocks", "system", "crypto", "aimodels", "calendar", "github_prs", "files"],
         default="weather",
         help="Start on this tab (default: weather)",
     )
