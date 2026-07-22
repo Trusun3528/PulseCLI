@@ -1,0 +1,204 @@
+/* ============================================================
+   Pulse — Terminal Dashboard
+   Dark theme with purple/cyan accent colors
+   ============================================================ */
+
+/* ── Root ── */
+Screen {
+    background: #0d0f14;
+    color: #e2e8f0;
+}
+
+/* ── Header ── */
+Header {
+    background: #0d0f14;
+    color: #e2e8f0;
+    height: 1;
+    dock: top;
+}
+
+Header > .header--title {
+    background: #0d0f14;
+    color: #7c3aed;
+    text-style: bold;
+}
+
+Header > .header--clock {
+    background: #0d0f14;
+    color: #64748b;
+}
+
+/* ── Footer ── */
+Footer {
+    background: #1a1d2e;
+    color: #64748b;
+    height: 1;
+}
+
+Footer > .footer--key {
+    background: #7c3aed;
+    color: #ffffff;
+}
+
+Footer > .footer--description {
+    color: #94a3b8;
+}
+
+/* ── Tabs ── */
+TabbedContent {
+    height: 1fr;
+}
+
+Tabs {
+    background: #1a1d2e;
+    border-bottom: solid #2d3057;
+    height: 3;
+}
+
+Tab {
+    background: #0d0f14;
+    color: #64748b;
+    padding: 0 2;
+}
+
+Tab:hover {
+    background: #1e2235;
+    color: #94a3b8;
+}
+
+Tab.-active {
+    background: #7c3aed;
+    color: #ffffff;
+    text-style: bold;
+}
+
+Tab.-active:hover {
+    background: #6d28d9;
+}
+
+TabPane {
+    padding: 0;
+    background: #0d0f14;
+}
+
+/* ── Data Tables ── */
+DataTable {
+    background: #0d0f14;
+    color: #e2e8f0;
+}
+
+DataTable > .datatable--header {
+    background: #1a1d2e;
+    color: #7c3aed;
+    text-style: bold;
+}
+
+DataTable > .datatable--header-hover {
+    background: #22253a;
+    color: #a78bfa;
+}
+
+DataTable > .datatable--cursor {
+    background: #2d1f5e;
+    color: #e2e8f0;
+}
+
+DataTable > .datatable--hover {
+    background: #1e2235;
+}
+
+DataTable > .datatable--odd-row {
+    background: #0d0f14;
+}
+
+DataTable > .datatable--even-row {
+    background: #111420;
+}
+
+/* ── Buttons ── */
+Button {
+    background: #1a1d2e;
+    color: #94a3b8;
+    border: tall #2d3057;
+}
+
+Button:hover {
+    background: #22253a;
+    color: #e2e8f0;
+    border: tall #4d3f8f;
+}
+
+Button.-active {
+    background: #2d1f5e;
+}
+
+/* ── Inputs ── */
+Input {
+    background: #0d0f14;
+    color: #e2e8f0;
+    border: tall #2d3057;
+}
+
+Input:focus {
+    border: tall #7c3aed;
+}
+
+Input>.input--placeholder {
+    color: #334155;
+}
+
+/* ── Select dropdowns ── */
+Select {
+    background: #0d0f14;
+    color: #e2e8f0;
+    border: tall #2d3057;
+}
+
+Select:focus {
+    border: tall #7c3aed;
+}
+
+SelectOverlay {
+    background: #1a1d2e;
+    border: tall #7c3aed;
+}
+
+SelectOverlay > .option-list--option {
+    color: #e2e8f0;
+}
+
+SelectOverlay > .option-list--option-highlighted {
+    background: #7c3aed;
+    color: #ffffff;
+}
+
+/* ── Scrollbars ── */
+ScrollBar {
+    background: #0d0f14;
+    color: #2d3057;
+}
+
+ScrollBar:hover {
+    color: #7c3aed;
+}
+
+/* ── Notifications (toasts) ── */
+Toast {
+    background: #1a1d2e;
+    border: solid #7c3aed;
+    color: #e2e8f0;
+}
+
+/* ── Loading indicator ── */
+LoadingIndicator {
+    color: #7c3aed;
+    background: #0d0f14;
+}
+
+/* ── Panels / containers ── */
+.panel {
+    background: #1a1d2e;
+    border: solid #2d3057;
+    padding: 1 2;
+    margin: 0 0 1 0;
+}
