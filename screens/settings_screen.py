@@ -113,7 +113,7 @@ class SettingsScreen(Screen):
             with ScrollableContainer(id="settings-scroll"):
                 yield from self._weather_section()
                 yield from self._news_section()
-                yield from self._reddit_section()
+                yield from self._youtube_section()
                 yield from self._stocks_section()
                 yield from self._general_section()
             with Horizontal(id="settings-footer"):
@@ -146,23 +146,20 @@ class SettingsScreen(Screen):
         yield Label("2-letter country code for headlines", classes="field-hint")
         yield Input(value=nc.get("country", "us"), placeholder="e.g. us, gb, ca", id="news-country")
 
-    def _reddit_section(self):
-        rc = self._config.get("reddit", {})
-        yield Static("🤖  Reddit", classes="section-title")
-        yield Static("──────────────────────────────────────────", classes="section-divider")
-        yield Label("ℹ  Reddit now requires a free API key", classes="field-hint")
-        yield Label("  1. Go to reddit.com/prefs/apps  2. Create App → script type", classes="field-hint")
-        yield Label("  3. Copy the ID (under app name) and Secret below", classes="field-hint")
-        yield Label("Client ID", classes="field-label")
-        yield Input(value=rc.get("client_id", ""), placeholder="e.g. aBcDeFgHiJkLmN", id="reddit-client-id")
-        yield Label("Client Secret", classes="field-label")
-        yield Input(value=rc.get("client_secret", ""), placeholder="e.g. xYzAbC123...", password=True, id="reddit-client-secret")
-        yield Label("Subreddits (comma-separated)", classes="field-label")
-        subreddits = ", ".join(rc.get("subreddits", []))
-        yield Input(value=subreddits, placeholder="e.g. programming, worldnews, science", id="reddit-subreddits")
-        yield Label("Default Sort", classes="field-label")
-        sort_opts = [("🔥 Hot", "hot"), ("✨ New", "new"), ("🏆 Top", "top"), ("📈 Rising", "rising")]
-        yield Select(sort_opts, value=rc.get("sort", "hot"), id="reddit-sort")
+    def _youtube_section(self):
+        yc = self._config.get("youtube", {})
+        yield Static("▶️  YouTube Trending", classes="section-title")
+        
+        yield Label("ℹ  YouTube Data API v3 requires a free API key", classes="field-hint")
+        yield Label("  1. Go to console.cloud.google.com", classes="field-hint")
+        yield Label("  2. Create a project and enable YouTube Data API v3", classes="field-hint")
+        yield Label("  3. Create an API key under Credentials", classes="field-hint")
+        
+        yield Label("API Key", classes="field-label")
+        yield Input(value=yc.get("api_key", ""), placeholder="AIzaSy...", password=True, id="youtube-api-key")
+        
+        yield Label("Region Code", classes="field-label")
+        yield Input(value=yc.get("region_code", "US"), placeholder="e.g. US, GB, JP", id="youtube-region-code")
 
     def _stocks_section(self):
         sc = self._config.get("stocks", {})
@@ -207,13 +204,11 @@ class SettingsScreen(Screen):
         config["news"]["api_key"] = self.query_one("#news-api-key", Input).value.strip()
         config["news"]["country"] = self.query_one("#news-country", Input).value.strip().lower()
 
-        # Reddit
-        config["reddit"]["client_id"] = self.query_one("#reddit-client-id", Input).value.strip()
-        config["reddit"]["client_secret"] = self.query_one("#reddit-client-secret", Input).value.strip()
-        subs_raw = self.query_one("#reddit-subreddits", Input).value
-        config["reddit"]["subreddits"] = [s.strip() for s in subs_raw.split(",") if s.strip()]
-        config["reddit"]["sort"] = str(self.query_one("#reddit-sort", Select).value)
-
+        # YouTube
+        if "youtube" not in config:
+            config["youtube"] = {}
+        config["youtube"]["api_key"] = self.query_one("#youtube-api-key", Input).value.strip()
+        config["youtube"]["region_code"] = self.query_one("#youtube-region-code", Input).value.strip().upper()
         # Stocks
         tickers_raw = self.query_one("#stocks-tickers", Input).value
         config["stocks"]["tickers"] = [t.strip().upper() for t in tickers_raw.split(",") if t.strip()]

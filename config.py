@@ -26,12 +26,9 @@ DEFAULT_CONFIG: Dict[str, Any] = {
         "category": "general",
         "page_size": 25,
     },
-    "reddit": {
-        "client_id": "",
-        "client_secret": "",
-        "user_agent": "pulse-cli:v1.0 (by /u/pulse_user)",
-        "subreddits": ["programming", "technology", "worldnews", "science", "todayilearned"],
-        "sort": "hot",
+    "youtube": {
+        "api_key": "",
+        "region_code": "US",
         "limit": 25,
     },
     "hackernews": {

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Pulse — A beautiful, interactive terminal dashboard.
-Weather, News, Reddit, Hacker News, GitHub Trending, Stocks & System Monitor.
+Weather, News, YouTube, Hacker News, GitHub Trending, Stocks & System Monitor.
 
 Usage:
     python main.py              # Launch dashboard
@@ -18,7 +18,7 @@ def main():
         description="Pulse — your personal terminal dashboard",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
-Tabs:  weather | news | reddit | hackernews | github | stocks | system
+Tabs:  weather | news | youtube | hackernews | github | stocks | system
 
 Key bindings (inside the app):
   1-7     Switch tabs
@@ -32,7 +32,7 @@ Configure API keys by pressing S inside the app, or edit:
     )
     parser.add_argument(
         "--tab",
-        choices=["weather", "news", "reddit", "hackernews", "github", "stocks", "system"],
+        choices=["weather", "news", "youtube", "hackernews", "github", "stocks", "system"],
         default="weather",
         help="Start on this tab (default: weather)",
     )

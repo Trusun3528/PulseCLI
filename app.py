@@ -1,6 +1,6 @@
 """
 Pulse — Main Textual application.
-A beautiful, interactive terminal dashboard for news, weather, Reddit, and more.
+A beautiful, interactive terminal dashboard for news, weather, YouTube Trending, and more.
 """
 
 from textual.app import App, ComposeResult
@@ -13,7 +13,7 @@ from screens.settings_screen import SettingsScreen
 from widgets.github_widget import GitHubWidget
 from widgets.hackernews_widget import HackerNewsWidget
 from widgets.news_widget import NewsWidget
-from widgets.reddit_widget import RedditWidget
+from widgets.youtube_widget import YoutubeWidget
 from widgets.stocks_widget import StocksWidget
 from widgets.sysinfo_widget import SysInfoWidget
 from widgets.weather_widget import WeatherWidget
@@ -32,7 +32,7 @@ class PulseApp(App):
         Binding("r", "refresh_current", "Refresh"),
         Binding("1", "switch_tab('weather')", "Weather", show=False),
         Binding("2", "switch_tab('news')", "News", show=False),
-        Binding("3", "switch_tab('reddit')", "Reddit", show=False),
+        Binding("3", "switch_tab('youtube')", "YouTube", show=False),
         Binding("4", "switch_tab('hackernews')", "Hacker News", show=False),
         Binding("5", "switch_tab('github')", "GitHub", show=False),
         Binding("6", "switch_tab('stocks')", "Stocks", show=False),
@@ -47,8 +47,8 @@ class PulseApp(App):
                 yield WeatherWidget()
             with TabPane("  📰  News  ", id="news"):
                 yield NewsWidget()
-            with TabPane("  🤖  Reddit  ", id="reddit"):
-                yield RedditWidget()
+            with TabPane("  ▶️  YouTube  ", id="youtube"):
+                yield YoutubeWidget()
             with TabPane("  🔥  Hacker News  ", id="hackernews"):
                 yield HackerNewsWidget()
             with TabPane("  🐙  GitHub  ", id="github"):
@@ -90,7 +90,7 @@ class PulseApp(App):
             widget_map = {
                 "weather": WeatherWidget,
                 "news": NewsWidget,
-                "reddit": RedditWidget,
+                "youtube": YoutubeWidget,
                 "hackernews": HackerNewsWidget,
                 "github": GitHubWidget,
                 "stocks": StocksWidget,
