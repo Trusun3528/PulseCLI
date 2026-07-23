@@ -23,6 +23,7 @@ from widgets.aimodels_widget import AiModelsWidget
 from widgets.calendar_widget import CalendarWidget
 from widgets.github_prs_widget import GithubPrsWidget
 from widgets.files_widget import FilesWidget
+from widgets.qr_generator_widget import QrGeneratorWidget
 
 
 class PulseApp(App):
@@ -52,6 +53,7 @@ class PulseApp(App):
         Binding("0", "switch_tab('calendar')", "Calendar", show=False),
         Binding("-", "switch_tab('github_prs')", "PRs", show=False),
         Binding("=", "switch_tab('files')", "Files", show=False),
+        Binding("[", "switch_tab('qrgen')", "QR Gen", show=False),
         Binding("ctrl+r", "refresh_current", "Refresh", show=False),
     ]
 
@@ -86,6 +88,8 @@ class PulseApp(App):
                 yield GithubPrsWidget()
             with TabPane("  📂  Files  ", id="files"):
                 yield FilesWidget()
+            with TabPane("  📱  QR Gen  ", id="qrgen"):
+                yield QrGeneratorWidget()
         yield Footer()
 
     def on_mount(self) -> None:
@@ -150,7 +154,7 @@ class PulseApp(App):
             tab_ids = [
                 "weather", "news", "youtube", "hackernews", "github",
                 "stocks", "system", "crypto", "aimodels", "calendar",
-                "github_prs", "files"
+                "github_prs", "files", "qrgen"
             ]
             if current in tab_ids:
                 next_idx = (tab_ids.index(current) + 1) % len(tab_ids)
