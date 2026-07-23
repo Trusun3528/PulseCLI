@@ -10,6 +10,7 @@ from textual.widgets import Footer, Header, TabbedContent, TabPane
 
 from config import load_config
 from screens.settings_screen import SettingsScreen
+from screens.tv_screen import TvScreen
 from widgets.github_widget import GitHubWidget
 from widgets.hackernews_widget import HackerNewsWidget
 from widgets.news_widget import NewsWidget
@@ -36,7 +37,9 @@ class PulseApp(App):
     BINDINGS = [
         Binding("q", "quit", "Quit", priority=True),
         Binding("s", "settings", "Settings"),
+        Binding("t", "tv_mode", "TV Mode"),
         Binding("r", "refresh_current", "Refresh"),
+        Binding("a", "toggle_auto_scroll", "Auto-Scroll"),
         Binding("1", "switch_tab('weather')", "Weather", show=False),
         Binding("2", "switch_tab('news')", "News", show=False),
         Binding("3", "switch_tab('youtube')", "YouTube", show=False),
@@ -107,6 +110,12 @@ class PulseApp(App):
             self.notify("Settings saved! Refreshing data…", severity="information", timeout=3)
             self.action_refresh_current()
 
+    def action_tv_mode(self) -> None:
+        """
+        Action triggered by 't'. Pushes the TV Mode screen.
+        """
+        self.push_screen(TvScreen())
+
     def action_switch_tab(self, tab_id: str) -> None:
         """
         Action triggered by pressing number keys to switch tabs.
@@ -116,6 +125,36 @@ class PulseApp(App):
         """
         try:
             self.query_one(TabbedContent).active = tab_id
+        except Exception:
+            pass
+
+    def action_toggle_auto_scroll(self) -> None:
+        """
+        Action triggered by 'a'. Toggles automatic cycling of tabs every few seconds.
+        """
+        if hasattr(self, "auto_scroll_timer") and self.auto_scroll_timer is not None:
+            self.auto_scroll_timer.stop()
+            self.auto_scroll_timer = None
+            self.notify("Auto-scroll disabled", severity="information", timeout=2)
+        else:
+            self.auto_scroll_timer = self.set_interval(5.0, self.cycle_next_tab)
+            self.notify("Auto-scroll enabled", severity="information", timeout=2)
+
+    def cycle_next_tab(self) -> None:
+        """
+        Cycles to the next tab in the dashboard.
+        """
+        try:
+            tabs = self.query_one(TabbedContent)
+            current = tabs.active
+            tab_ids = [
+                "weather", "news", "youtube", "hackernews", "github",
+                "stocks", "system", "crypto", "aimodels", "calendar",
+                "github_prs", "files"
+            ]
+            if current in tab_ids:
+                next_idx = (tab_ids.index(current) + 1) % len(tab_ids)
+                tabs.active = tab_ids[next_idx]
         except Exception:
             pass
 

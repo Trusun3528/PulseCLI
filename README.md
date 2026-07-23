@@ -16,6 +16,7 @@
 - **📅 Calendar**: Track upcoming events via ICS links or world public holidays.
 - **🐙 Pull Requests**: Monitor your open GitHub Pull Requests.
 - **📂 File Explorer**: Browse and open local files directly from the dashboard.
+- **📺 TV Mode**: A dedicated digital signage view perfect for large displays, featuring a scrolling marquee, live QR codes, and dynamic content swapping!
 
 ## 🛠️ Installation
 
@@ -51,6 +52,8 @@ python main.py --tab news
 
 ### ⌨️ Key Bindings
 - `1-7`, `8`, `9`, `0`, `-`, `=`: Switch between tabs (Weather, News, YouTube, Hacker News, GitHub, Stocks, System, Crypto, AI Models, Calendar, PRs, Files)
+- `T`: Open TV Mode (digital signage display)
+- `A`: Toggle auto-scrolling of tabs
 - `S`: Open Settings
 - `R` or `Ctrl+R`: Refresh current tab
 - `Enter`: Open selected article/link in your browser

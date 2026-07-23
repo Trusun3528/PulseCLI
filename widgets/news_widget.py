@@ -129,6 +129,7 @@ class NewsWidget(Widget):
 
         if articles is None or (isinstance(articles, dict) and "error" in articles):
             err = (articles or {}).get("error", "unknown") if isinstance(articles, dict) else "unknown"
+            self.is_429_error = "429" in str(err)
             if err == "no_key":
                 table.add_row("", self._no_key_text(), "")
             else:
@@ -136,6 +137,7 @@ class NewsWidget(Widget):
             status.update("")
             return
 
+        self.is_429_error = False
         self._articles = articles  # store for open action
 
         for i, a in enumerate(articles):
@@ -167,6 +169,25 @@ class NewsWidget(Widget):
 
     def action_refresh(self) -> None:
         self.load_news()
+
+    def cycle_category(self) -> None:
+        """Cycles to the next news category and reloads."""
+        try:
+            current_idx = CATEGORIES.index(self.current_category)
+            next_idx = (current_idx + 1) % len(CATEGORIES)
+            next_cat = CATEGORIES[next_idx]
+            
+            # Update active button styling
+            for btn in self.query("#news-toolbar Button"):
+                btn.remove_class("active-cat")
+            
+            btn = self.query_one(f"#cat-{next_cat}", Button)
+            btn.add_class("active-cat")
+            
+            self.current_category = next_cat
+            self.load_news()
+        except Exception:
+            pass
 
     def _no_key_text(self) -> Text:
         t = Text()
