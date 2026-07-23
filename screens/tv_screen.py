@@ -25,6 +25,8 @@ from widgets.aimodels_widget import AiModelsWidget
 from widgets.github_prs_widget import GithubPrsWidget
 from widgets.files_widget import FilesWidget
 from widgets.packages_widget import PackagesWidget
+from widgets.ping_widget import PingWidget
+from widgets.rss_widget import RSSWidget
 
 from config import load_config
 
@@ -42,6 +44,8 @@ WIDGET_MAP = {
     "github_prs": GithubPrsWidget,
     "files": FilesWidget,
     "packages": PackagesWidget,
+    "ping": PingWidget,
+    "rss": RSSWidget,
     "qr": QrWidget,
 }
 
@@ -268,6 +272,10 @@ class TvScreen(Screen):
             elif hasattr(widget, "_packages") and widget._packages and len(widget._packages) > idx:
                 item = widget._packages[idx]
                 title = f"  UPDATE AVAILABLE  |  {item.get('name', '')} {item.get('available', '')}  "
+            elif hasattr(widget, "_articles") and widget.__class__.__name__ == "RSSWidget" and widget._articles and len(widget._articles) > idx:
+                item = widget._articles[idx]
+                url = item.get("link", "")
+                title = f"  RSS FEED  |  {item.get('title', '')}  "
         except Exception:
             pass
         return url, title

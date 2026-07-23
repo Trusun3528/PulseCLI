@@ -136,6 +136,8 @@ class SettingsScreen(Screen):
                 yield from self._crypto_section()
                 yield from self._calendar_section()
                 yield from self._github_prs_section()
+                yield from self._ping_section()
+                yield from self._rss_section()
                 yield from self._general_section()
             with Horizontal(id="settings-footer"):
                 yield Static("Press Ctrl+S to save  ·  Esc to cancel", classes="field-hint")
@@ -155,7 +157,7 @@ class SettingsScreen(Screen):
             ("hackernews", "Hacker News"), ("github", "GitHub"), ("stocks", "Stocks"),
             ("system", "System"), ("crypto", "Crypto"), ("aimodels", "AI Models"),
             ("calendar", "Calendar"), ("github_prs", "GitHub PRs"), ("files", "Files"),
-            ("qrgen", "QR Gen"), ("packages", "Packages")
+            ("qrgen", "QR Gen"), ("packages", "Packages"), ("ping", "Ping Monitor"), ("rss", "RSS Feed")
         ]
         
         for tab_id, label_text in tabs_def:
@@ -173,7 +175,7 @@ class SettingsScreen(Screen):
             ("GitHub", "github"), ("Stocks", "stocks"), ("System", "system"), 
             ("Weather", "weather"), ("Crypto", "crypto"), ("AI Models", "aimodels"), 
             ("Calendar", "calendar"), ("GitHub PRs", "github_prs"), ("Files", "files"),
-            ("Packages", "packages"), ("QR Display", "qr")
+            ("Packages", "packages"), ("QR Display", "qr"), ("Ping", "ping"), ("RSS", "rss")
         ]
         
         yield Label("Main Widget 1", classes="field-label")
@@ -267,6 +269,27 @@ class SettingsScreen(Screen):
         yield Label("GitHub PAT (Optional but recommended)", classes="field-label")
         yield Input(value=gc.get("token", ""), placeholder="ghp_...", password=True, id="github-prs-token")
 
+    def _ping_section(self):
+        pc = self._config.get("ping", {})
+        yield Static("📡  Ping Monitor", classes="section-title")
+        yield Static("──────────────────────────────────────────", classes="section-divider")
+        yield Label("Targets (Format: Name,Host | comma separated for multiple)", classes="field-label")
+        yield Label("e.g. Google DNS,8.8.8.8, Cloudflare,1.1.1.1", classes="field-hint")
+        
+        targets_list = pc.get("targets", [])
+        targets_str = ", ".join([f"{t.get('name')},{t.get('host')}" for t in targets_list])
+        
+        yield Input(value=targets_str, placeholder="Name1,Host1, Name2,Host2", id="ping-targets")
+
+    def _rss_section(self):
+        rc = self._config.get("rss", {})
+        yield Static("📰  RSS Feed Reader", classes="section-title")
+        yield Static("──────────────────────────────────────────", classes="section-divider")
+        yield Label("RSS / Atom Feed URL", classes="field-label")
+        yield Input(value=rc.get("url", ""), placeholder="https://...", id="rss-url")
+        yield Label("Feed Title", classes="field-label")
+        yield Input(value=rc.get("title", ""), placeholder="My Feed", id="rss-title")
+
     def _general_section(self):
         gc = self._config.get("general", {})
         yield Static("⚙  General", classes="section-title")
@@ -299,7 +322,7 @@ class SettingsScreen(Screen):
         if "tabs" not in config:
             config["tabs"] = {}
         for tab_id in ["weather", "news", "youtube", "hackernews", "github", "stocks", 
-                       "system", "crypto", "aimodels", "calendar", "github_prs", "files", "qrgen", "packages"]:
+                       "system", "crypto", "aimodels", "calendar", "github_prs", "files", "qrgen", "packages", "ping", "rss"]:
             try:
                 config["tabs"][tab_id] = self.query_one(f"#tab-{tab_id}", Switch).value
             except Exception:
@@ -351,6 +374,24 @@ class SettingsScreen(Screen):
             config["github_prs"] = {}
         config["github_prs"]["username"] = self.query_one("#github-prs-username", Input).value.strip()
         config["github_prs"]["token"] = self.query_one("#github-prs-token", Input).value.strip()
+
+        # Ping
+        if "ping" not in config:
+            config["ping"] = {}
+        ping_raw = self.query_one("#ping-targets", Input).value
+        targets = []
+        for pair in ping_raw.split(", "):
+            parts = pair.split(",")
+            if len(parts) == 2:
+                targets.append({"name": parts[0].strip(), "host": parts[1].strip()})
+        if targets:
+            config["ping"]["targets"] = targets
+            
+        # RSS
+        if "rss" not in config:
+            config["rss"] = {}
+        config["rss"]["url"] = self.query_one("#rss-url", Input).value.strip()
+        config["rss"]["title"] = self.query_one("#rss-title", Input).value.strip()
 
         # General
         try:

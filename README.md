@@ -17,6 +17,8 @@
 - **🐙 Pull Requests**: Monitor your open GitHub Pull Requests.
 - **📂 File Explorer**: Browse and open local files directly from the dashboard.
 - **📱 QR Generator**: Real-time QR code generator for URLs, text, Wi-Fi networks, and SMS messages.
+- **📡 Ping Monitor**: Live network latency tracker for specified IP addresses and domains.
+- **📰 RSS Reader**: Universal RSS and Atom feed reader (perfect for subreddits or tech blogs!).
 - **📦 Packages**: Cross-platform local package manager updates (supports `apt`, `dnf`, `pacman`/`yay`/`paru`, `zypper`, `brew`, `winget`). Includes a safe, interactive native terminal update feature!
 - **📺 TV Mode**: A dedicated digital signage view perfect for large displays. Features a scrolling marquee, live QR codes, and dynamically customizable content slots!
 
@@ -79,7 +81,7 @@ Your configuration is saved securely to `~/.config/pulse/config.toml`.
 ### Optional APIs:
 - **GitHub PRs**: Optional Personal Access Token for higher rate limits.
 
-*(Hacker News, GitHub, Stocks, Crypto, AI Models, Calendar, Files, and System Monitor work out of the box!)*
+*(Hacker News, GitHub, Stocks, Crypto, AI Models, Calendar, Files, System Monitor, Packages, Ping, and RSS work out of the box!)*
 
 ## 🤝 Contributing
 

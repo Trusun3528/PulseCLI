@@ -25,6 +25,8 @@ from widgets.github_prs_widget import GithubPrsWidget
 from widgets.files_widget import FilesWidget
 from widgets.qr_generator_widget import QrGeneratorWidget
 from widgets.packages_widget import PackagesWidget
+from widgets.ping_widget import PingWidget
+from widgets.rss_widget import RSSWidget
 
 
 class PulseApp(App):
@@ -96,6 +98,10 @@ class PulseApp(App):
                 with TabPane("  📱  QR Gen  ", id="qrgen"): yield QrGeneratorWidget()
             if tc.get("packages", True):
                 with TabPane("  📦  Packages  ", id="packages"): yield PackagesWidget()
+            if tc.get("ping", True):
+                with TabPane("  📡  Ping  ", id="ping"): yield PingWidget()
+            if tc.get("rss", True):
+                with TabPane("  📰  RSS  ", id="rss"): yield RSSWidget()
                 
         yield Footer()
 
@@ -145,6 +151,8 @@ class PulseApp(App):
                 if tc.get("files", True): await new_tabs.add_pane(TabPane("  📂  Files  ", FilesWidget(), id="files"))
                 if tc.get("qrgen", True): await new_tabs.add_pane(TabPane("  📱  QR Gen  ", QrGeneratorWidget(), id="qrgen"))
                 if tc.get("packages", True): await new_tabs.add_pane(TabPane("  📦  Packages  ", PackagesWidget(), id="packages"))
+                if tc.get("ping", True): await new_tabs.add_pane(TabPane("  📡  Ping  ", PingWidget(), id="ping"))
+                if tc.get("rss", True): await new_tabs.add_pane(TabPane("  📰  RSS  ", RSSWidget(), id="rss"))
 
                 # Try to restore the active tab if it's still enabled
                 if active_id and tc.get(active_id, True):
@@ -194,7 +202,7 @@ class PulseApp(App):
             tab_ids = [
                 "weather", "news", "youtube", "hackernews", "github",
                 "stocks", "system", "crypto", "aimodels", "calendar",
-                "github_prs", "files", "qrgen"
+                "github_prs", "files", "qrgen", "packages", "ping", "rss"
             ]
             if current in tab_ids:
                 next_idx = (tab_ids.index(current) + 1) % len(tab_ids)
@@ -224,6 +232,8 @@ class PulseApp(App):
                 "github_prs": GithubPrsWidget,
                 "files": FilesWidget,
                 "packages": PackagesWidget,
+                "ping": PingWidget,
+                "rss": RSSWidget,
             }
             widget_class = widget_map.get(active)
             if widget_class:

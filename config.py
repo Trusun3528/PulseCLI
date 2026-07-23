@@ -31,6 +31,8 @@ DEFAULT_CONFIG: Dict[str, Any] = {
         "files": True,
         "qrgen": True,
         "packages": True,
+        "ping": True,
+        "rss": True,
     },
     "tv_mode": {
         "main_1": "news",
@@ -77,6 +79,18 @@ DEFAULT_CONFIG: Dict[str, Any] = {
     "github_prs": {
         "username": "",
         "token": "",
+    },
+    "ping": {
+        "targets": [
+            {"name": "Google DNS", "host": "8.8.8.8"},
+            {"name": "Cloudflare", "host": "1.1.1.1"},
+            {"name": "Localhost", "host": "127.0.0.1"}
+        ]
+    },
+    "rss": {
+        "url": "https://news.ycombinator.com/rss",
+        "title": "Hacker News RSS",
+        "limit": 25
     }
 }
 
