@@ -45,7 +45,22 @@ async def fetch_headlines(
     category: str = "general",
     page_size: int = 25,
 ) -> Optional[List[Dict[str, Any]]]:
-    """Fetch top headlines from NewsAPI."""
+    """
+    Fetch top headlines from NewsAPI.
+    
+    This function makes an asynchronous HTTP GET request to the NewsAPI service
+    and parses the returned JSON into a standardized list of article dictionaries.
+    
+    Args:
+        api_key (str): The NewsAPI key for authentication.
+        country (str): 2-letter country code (default 'us').
+        category (str): News category to filter by (default 'general').
+        page_size (int): Max number of headlines to return (default 25).
+        
+    Returns:
+        Optional[List[Dict[str, Any]]]: A list of article dictionaries on success,
+        or a dictionary with an "error" key on failure.
+    """
     if not api_key:
         return {"error": "no_key"}  # type: ignore[return-value]
 
@@ -94,7 +109,12 @@ async def fetch_headlines(
 
 
 def _parse_articles(data: dict, category: str) -> list:
-    """Extract and clean article list from NewsAPI response."""
+    """
+    Extract and clean up the article list from the raw NewsAPI JSON response.
+    
+    This function maps the API's fields to a standard format used by the News widget,
+    calculating the human-readable time elapsed since publication.
+    """
     articles = []
     for a in data.get("articles", []):
         title = a.get("title") or ""

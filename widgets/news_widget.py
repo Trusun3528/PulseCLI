@@ -22,7 +22,10 @@ from providers.news import CATEGORIES, CATEGORY_ICONS, fetch_headlines
 
 
 class NewsWidget(Widget):
-    """News headlines browser with category filter."""
+    """
+    News headlines browser widget with a category filter.
+    Displays headlines fetched from NewsAPI in a scrollable data table.
+    """
 
     BINDINGS = [
         Binding("enter", "open_article", "Open in Browser"),
@@ -73,6 +76,10 @@ class NewsWidget(Widget):
     current_category: reactive[str] = reactive("general")
 
     def compose(self) -> ComposeResult:
+        """
+        Build the widget layout. Yields a top toolbar for categories,
+        a data table for headlines, and a status bar at the bottom.
+        """
         with Horizontal(id="news-toolbar"):
             for cat in CATEGORIES:
                 icon = CATEGORY_ICONS.get(cat, "📰")
@@ -101,6 +108,10 @@ class NewsWidget(Widget):
 
     @work(exclusive=True, thread=False)
     async def load_news(self) -> None:
+        """
+        Asynchronously fetches and populates the data table with news headlines
+        based on the user's config and selected category.
+        """
         config = load_config()
         nc = config["news"]
 
@@ -141,6 +152,9 @@ class NewsWidget(Widget):
         self.action_open_article()
 
     def action_open_article(self) -> None:
+        """
+        Opens the currently selected article's URL in the system's default web browser.
+        """
         table = self.query_one(DataTable)
         if table.cursor_row is None:
             return

@@ -11,6 +11,7 @@ CONFIG_DIR = Path.home() / ".config" / "pulse"
 CONFIG_FILE = CONFIG_DIR / "config.toml"
 
 DEFAULT_CONFIG: Dict[str, Any] = {
+    # General application settings
     "general": {
         "refresh_interval": 300,  # seconds
         "theme": "dark",
@@ -58,7 +59,17 @@ DEFAULT_CONFIG: Dict[str, Any] = {
 
 
 def load_config() -> Dict[str, Any]:
-    """Load configuration from file, creating defaults if needed."""
+    """
+    Load configuration from the user's config file.
+    
+    If the file does not exist, it creates one with the default settings.
+    If the file exists, it reads the user's settings and merges them with
+    the defaults, ensuring any missing keys are populated.
+    
+    Returns:
+        Dict[str, Any]: The fully populated configuration dictionary.
+    """
+    # Ensure the directory exists before trying to access or create the file
     CONFIG_DIR.mkdir(parents=True, exist_ok=True)
 
     if not CONFIG_FILE.exists():
@@ -74,8 +85,15 @@ def load_config() -> Dict[str, Any]:
 
 
 def save_config(config: Dict[str, Any]) -> None:
-    """Save configuration to file."""
+    """
+    Save the provided configuration dictionary to the config file on disk.
+    
+    Args:
+        config (Dict[str, Any]): The configuration to save, typically modified by the user.
+    """
+    # Create the directory if it's not already there
     CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+    # Write the dictionary as TOML format to the file
     with open(CONFIG_FILE, "w") as f:
         toml.dump(config, f)
 
@@ -87,7 +105,20 @@ def _deep_copy(d: Dict) -> Dict:
 
 
 def _deep_merge(base: Dict, override: Dict) -> Dict:
-    """Deep merge override into base dict, returning merged result."""
+    """
+    Recursively merge an override dictionary into a base dictionary.
+    
+    This ensures that nested dictionaries (like 'weather' or 'news' settings)
+    are properly merged rather than entirely replaced if the user only provides
+    a partial configuration.
+    
+    Args:
+        base (Dict): The default configuration dict.
+        override (Dict): The user's configuration dict.
+        
+    Returns:
+        Dict: A new dictionary containing the merged result.
+    """
     result = base.copy()
     for key, value in override.items():
         if key in result and isinstance(result[key], dict) and isinstance(value, dict):

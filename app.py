@@ -31,6 +31,8 @@ class PulseApp(App):
     SUB_TITLE = "Terminal Dashboard"
     CSS_PATH = "app.tcss"
 
+    # Keyboard bindings available globally within the app.
+    # Format is Binding(key, action, description)
     BINDINGS = [
         Binding("q", "quit", "Quit", priority=True),
         Binding("s", "settings", "Settings"),
@@ -51,6 +53,10 @@ class PulseApp(App):
     ]
 
     def compose(self) -> ComposeResult:
+        """
+        Builds the user interface of the application.
+        This method yields the widgets that make up the layout.
+        """
         yield Header(show_clock=True)
         with TabbedContent(id="main-tabs", initial="weather"):
             with TabPane("  🌤  Weather  ", id="weather"):
@@ -80,14 +86,20 @@ class PulseApp(App):
         yield Footer()
 
     def on_mount(self) -> None:
-        """Set up auto-refresh timer on mount."""
+        """
+        Called when the application starts (is mounted).
+        Sets up the auto-refresh timer based on the user's config.
+        """
         config = load_config()
         interval = config.get("general", {}).get("refresh_interval", 300)
         self.set_interval(interval, self.action_refresh_current)
 
     @work
     async def action_settings(self) -> None:
-        """Open the settings screen."""
+        """
+        Action triggered by pressing the 's' key.
+        Opens the settings screen asynchronously to allow the user to modify configuration.
+        """
         config = load_config()
         result = await self.push_screen_wait(SettingsScreen(config))
         if result is not None:
@@ -96,14 +108,22 @@ class PulseApp(App):
             self.action_refresh_current()
 
     def action_switch_tab(self, tab_id: str) -> None:
-        """Switch to a specific tab by ID."""
+        """
+        Action triggered by pressing number keys to switch tabs.
+        
+        Args:
+            tab_id (str): The ID of the tab to switch to (e.g., 'weather', 'news').
+        """
         try:
             self.query_one(TabbedContent).active = tab_id
         except Exception:
             pass
 
     def action_refresh_current(self) -> None:
-        """Refresh the currently active tab's widget."""
+        """
+        Action triggered by pressing 'r'.
+        Refreshes the currently active tab's widget by calling its specific load method.
+        """
         try:
             tabs = self.query_one(TabbedContent)
             active = tabs.active

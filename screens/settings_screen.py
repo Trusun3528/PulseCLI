@@ -12,7 +12,12 @@ from textual.widgets import Button, Input, Label, Select, Static, Switch
 
 
 class SettingsScreen(Screen):
-    """Full-screen settings panel."""
+    """
+    Full-screen settings panel that allows the user to configure API keys,
+    locations, and other preferences for each dashboard widget.
+    
+    This screen is loaded dynamically and reads/writes from the config file.
+    """
 
     BINDINGS = [
         Binding("escape", "dismiss", "Close"),
@@ -220,7 +225,10 @@ class SettingsScreen(Screen):
             self.action_dismiss()
 
     def action_save(self) -> None:
-        """Collect all field values and save config."""
+        """
+        Collect all field values from the settings UI, update the configuration dictionary,
+        and save the changes to the user's config file. Also dismisses the screen upon success.
+        """
         from config import save_config
 
         config = self._config.copy()

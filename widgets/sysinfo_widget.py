@@ -129,10 +129,21 @@ class SysInfoWidget(Static):
 
     def _platform_section(self, plat: Dict) -> Group:
         t = Text()
-        t.append("── System  ", style="#64748b bold")
-        t.append(f"{plat['system']} {plat['release']}  ", style="#94a3b8")
-        t.append(f"Host: {plat['node']}  ", style="#64748b")
-        t.append(f"Python {plat['python']}", style="#64748b")
+        t.append("── Specs & System\n", style="#64748b bold")
+        t.append(f"  OS:       ", style="#94a3b8")
+        t.append(f"{plat['system']} {plat['release']}\n", style="#e2e8f0")
+        t.append(f"  Arch:     ", style="#94a3b8")
+        t.append(f"{plat['machine']}\n", style="#e2e8f0")
+        
+        processor = plat.get('processor')
+        if processor:
+            t.append(f"  CPU:      ", style="#94a3b8")
+            t.append(f"{processor}\n", style="#e2e8f0")
+            
+        t.append(f"  Host:     ", style="#94a3b8")
+        t.append(f"{plat['node']}\n", style="#e2e8f0")
+        t.append(f"  Python:   ", style="#94a3b8")
+        t.append(f"{plat['python']}", style="#e2e8f0")
         return Group(t)
 
     def _bar_line(

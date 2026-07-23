@@ -117,6 +117,7 @@ def get_system_info() -> Dict[str, Any]:
             "node": uname.node,
             "release": uname.release,
             "machine": uname.machine,
+            "processor": platform.processor(),
             "python": platform.python_version(),
         },
     }
