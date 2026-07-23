@@ -106,6 +106,17 @@ class SettingsScreen(Screen):
         color: #94a3b8;
         border: tall #2d3057;
     }
+    .tab-toggle-row {
+        height: 3;
+        margin: 1 0;
+        align: left middle;
+    }
+    .tab-toggle-row Switch {
+        margin: 0 2 0 0;
+    }
+    .tab-toggle-row Label {
+        margin: 0;
+    }
     """
 
     def __init__(self, config: Dict[str, Any], **kwargs):
@@ -116,6 +127,8 @@ class SettingsScreen(Screen):
         with Vertical(id="settings-container"):
             yield Static("⚙  Pulse Settings", id="settings-title")
             with ScrollableContainer(id="settings-scroll"):
+                yield from self._tabs_section()
+                yield from self._tv_mode_section()
                 yield from self._weather_section()
                 yield from self._news_section()
                 yield from self._youtube_section()
@@ -128,6 +141,55 @@ class SettingsScreen(Screen):
                 yield Static("Press Ctrl+S to save  ·  Esc to cancel", classes="field-hint")
                 yield Button("✕  Cancel", id="btn-cancel")
                 yield Button("✓  Save", id="btn-save", variant="primary")
+
+    def _tabs_section(self):
+        tc = self._config.get("tabs", {})
+        yield Static("📑  Tabs", classes="section-title")
+        yield Static("──────────────────────────────────────────", classes="section-divider")
+        
+        from textual.containers import Horizontal
+        from textual.widgets import Switch, Label
+        
+        tabs_def = [
+            ("weather", "Weather"), ("news", "News"), ("youtube", "YouTube"), 
+            ("hackernews", "Hacker News"), ("github", "GitHub"), ("stocks", "Stocks"),
+            ("system", "System"), ("crypto", "Crypto"), ("aimodels", "AI Models"),
+            ("calendar", "Calendar"), ("github_prs", "GitHub PRs"), ("files", "Files"),
+            ("qrgen", "QR Gen"), ("packages", "Packages")
+        ]
+        
+        for tab_id, label_text in tabs_def:
+            with Horizontal(classes="tab-toggle-row"):
+                yield Switch(value=tc.get(tab_id, True), id=f"tab-{tab_id}")
+                yield Label(label_text, classes="field-label")
+
+    def _tv_mode_section(self):
+        tvc = self._config.get("tv_mode", {})
+        yield Static("📺  TV Mode", classes="section-title")
+        yield Static("──────────────────────────────────────────", classes="section-divider")
+        
+        opts = [
+            ("News", "news"), ("YouTube", "youtube"), ("Hacker News", "hackernews"), 
+            ("GitHub", "github"), ("Stocks", "stocks"), ("System", "system"), 
+            ("Weather", "weather"), ("Crypto", "crypto"), ("AI Models", "aimodels"), 
+            ("Calendar", "calendar"), ("GitHub PRs", "github_prs"), ("Files", "files"),
+            ("Packages", "packages"), ("QR Display", "qr")
+        ]
+        
+        yield Label("Main Widget 1", classes="field-label")
+        yield Select(opts, value=tvc.get("main_1", "news"), id="tv-main-1")
+        
+        yield Label("Main Widget 2", classes="field-label")
+        yield Select(opts, value=tvc.get("main_2", "youtube"), id="tv-main-2")
+        
+        yield Label("Side Widget 1", classes="field-label")
+        yield Select(opts, value=tvc.get("side_1", "calendar"), id="tv-side-1")
+        
+        yield Label("Side Widget 2", classes="field-label")
+        yield Select(opts, value=tvc.get("side_2", "system"), id="tv-side-2")
+        
+        yield Label("Bottom Left Widget (Usually QR)", classes="field-label")
+        yield Select(opts, value=tvc.get("qr_spot", "qr"), id="tv-qr-spot")
 
     def _weather_section(self):
         wc = self._config.get("weather", {})
@@ -232,6 +294,28 @@ class SettingsScreen(Screen):
         from config import save_config
 
         config = self._config.copy()
+        
+        # Tabs
+        if "tabs" not in config:
+            config["tabs"] = {}
+        for tab_id in ["weather", "news", "youtube", "hackernews", "github", "stocks", 
+                       "system", "crypto", "aimodels", "calendar", "github_prs", "files", "qrgen", "packages"]:
+            try:
+                config["tabs"][tab_id] = self.query_one(f"#tab-{tab_id}", Switch).value
+            except Exception:
+                pass
+                
+        # TV Mode
+        if "tv_mode" not in config:
+            config["tv_mode"] = {}
+        try:
+            config["tv_mode"]["main_1"] = str(self.query_one("#tv-main-1", Select).value)
+            config["tv_mode"]["main_2"] = str(self.query_one("#tv-main-2", Select).value)
+            config["tv_mode"]["side_1"] = str(self.query_one("#tv-side-1", Select).value)
+            config["tv_mode"]["side_2"] = str(self.query_one("#tv-side-2", Select).value)
+            config["tv_mode"]["qr_spot"] = str(self.query_one("#tv-qr-spot", Select).value)
+        except Exception:
+            pass
 
         # Weather
         config["weather"]["api_key"] = self.query_one("#weather-api-key", Input).value.strip()

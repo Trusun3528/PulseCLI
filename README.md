@@ -17,7 +17,8 @@
 - **🐙 Pull Requests**: Monitor your open GitHub Pull Requests.
 - **📂 File Explorer**: Browse and open local files directly from the dashboard.
 - **📱 QR Generator**: Real-time QR code generator for URLs, text, Wi-Fi networks, and SMS messages.
-- **📺 TV Mode**: A dedicated digital signage view perfect for large displays, featuring a scrolling marquee, live QR codes, and dynamic content swapping!
+- **📦 Packages**: Cross-platform local package manager updates (supports `apt`, `dnf`, `pacman`/`yay`/`paru`, `zypper`, `brew`, `winget`). Includes a safe, interactive native terminal update feature!
+- **📺 TV Mode**: A dedicated digital signage view perfect for large displays. Features a scrolling marquee, live QR codes, and dynamically customizable content slots!
 
 ## 🛠️ Installation
 
@@ -52,7 +53,7 @@ python main.py --tab news
 ```
 
 ### ⌨️ Key Bindings
-- `1-7`, `8`, `9`, `0`, `-`, `=`, `[`: Switch between tabs (Weather, News, YouTube, Hacker News, GitHub, Stocks, System, Crypto, AI Models, Calendar, PRs, Files, QR Gen)
+- `1-9`, `0`, `-`, `=`, `[`, `]`: Switch between active tabs
 - `T`: Open TV Mode (digital signage display)
 - `A`: Toggle auto-scrolling of tabs
 - `S`: Open Settings
@@ -65,7 +66,7 @@ python main.py --tab news
 Many of Pulse's widgets require API keys to function. Pulse includes a built-in UI for managing your configuration!
 
 1. Press `S` inside the app to open the **Settings** screen.
-2. Enter your API keys and customize your region, stock tickers, and refresh intervals.
+2. Enter your API keys, customize your region/stock tickers, **toggle active tabs on/off**, and **configure TV Mode widgets**!
 3. Press `Ctrl+S` to save.
 
 Your configuration is saved securely to `~/.config/pulse/config.toml`.
